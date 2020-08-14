@@ -87,19 +87,22 @@ component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma =
 dim(component2) # 48   6
 dataset <- rbind(component1, component2)
 dim(dataset) # 100   6
-pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
 
+# Visualize data
+# pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
+
+# Cluster data
 clustOutput <- mixGaussianEM(dataset = dataset,
                              membership = "none",
                              gmin = 1,
-                             gmax = 2,
-                             initMethod = "random",
+                             gmax = 5,
+                             initMethod = "kmeans",
                              nInitIterations = 1)
-
 
 }
 \references{
-
+Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum likelihood from incomplete
+data via the EM algorithm. \emph{Journal of the Royal Statistical Society: Series B} 39, 1–38.
 }
 \author{
 {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}

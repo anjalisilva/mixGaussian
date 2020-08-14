@@ -10,8 +10,7 @@ BICFunction(
   nObservations,
   clusterRunOutput = NA,
   gmin,
-  gmax,
-  parallel = FALSE
+  gmax
 )
 }
 \arguments{
@@ -34,9 +33,6 @@ to be considered in the clustering run.}
 
 \item{gmax}{A positive integer, >gmin, specifying the maximum number of
 components to be considered in the clustering run.}
-
-\item{parallel}{TRUE or FALSE indicating if MPLNClust::mplnMCMCParallel
-has been used.}
 }
 \value{
 Returns an S3 object of class MPLN with results.
@@ -54,35 +50,39 @@ Performs model selection using Bayesian Information Criterion (BIC) by
 Schwarz (1978). Formula: - 2 * logLikelihood + (nParameters * log(nObservations)).
 }
 \examples{
-# Generating simulated data
 
-trueMu1 <- c(6.5, 6, 6, 6, 6, 6)
-trueMu2 <- c(2, 2.5, 2, 2, 2, 2)
-trueSigma1 <- diag(6) * 2
-trueSigma2 <- diag(6)
-sampleData <- MPLNClust::mplnDataGenerator(nObservations = 100,
-                                 dimensionality = 6,
-                                 mixingProportions = c(0.79, 0.21),
-                                 mu = rbind(trueMu1, trueMu2),
-                                 sigma = rbind(trueSigma1, trueSigma2),
-                                 produceImage = "No")
-# Clustering
-mplnResults <- MPLNClust::mplnVariational(dataset = sampleData$dataset,
-                                membership = sampleData$trueMembership,
-                                gmin = 1,
-                                gmax = 2,
-                                initMethod = "kmeans",
-                                nInitIterations = 2,
-                                normalize = "Yes")
+# Generating simulated data
+G = 2 # number of true clusters/components
+dimension = 6
+nObservations = 1000
+piGTrue <- c(0.8, 0.2)
+
+set.seed(1234)
+mean1 <- rep(1, dimension)
+mean2 <- rep(4, dimension)
+sigma1 <- diag(dimension) * 0.2
+sigma2 <- diag(dimension) * 0.5
+
+library(mvtnorm)
+component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
+component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
+dataset <- rbind(component1, component2)
+
+# Cluster data
+clustOutput <- mixGaussianEM(dataset = dataset,
+                             membership = "none",
+                             gmin = 1,
+                             gmax = 2,
+                             initMethod = "kmeans",
+                             nInitIterations = 1)
 
 # Model selection
-BICmodel <- MPLNClust::BICFunction(logLikelihood = mplnResults$logLikelihood,
-                         nParameters = mplnResults$numbParameters,
-                         nObservations = nrow(mplnResults$dataset),
-                         clusterRunOutput = mplnResults$allResults,
-                         gmin = mplnResults$gmin,
-                         gmax = mplnResults$gmax,
-                         parallel = FALSE)
+BICmodel <- BICFunction(logLikelihood = clustOutput$logLikelihood,
+                         nParameters = clustOutput$numbParameters,
+                         nObservations = nrow(clustOutput$dataset),
+                         clusterRunOutput = clustOutput$allResults,
+                         gmin = clustOutput$gmin,
+                         gmax = clustOutput$gmax)
 
 }
 \references{
