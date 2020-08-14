@@ -13,3 +13,7 @@ LazyData: true
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/anjalisilva/
+Imports: 
+    mclust,
+    stats,
+    mvtnorm
