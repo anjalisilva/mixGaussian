@@ -69,7 +69,7 @@ BIC and ICL.
 }
 \examples{
 # Generating simulated data
-G = 2
+G = 2 # number of true clusters/components
 dimension = 6
 nObservations = 1000
 piGTrue <- c(0.8, 0.2)
