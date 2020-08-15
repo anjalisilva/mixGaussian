@@ -1,0 +1,12 @@
+citHeader("To cite mixGaussian in publications use:")
+
+citEntry(
+  entry    = "Unpublished",
+  title    = "Clustering Using Mixtures of Multivariate Gaussian Via EM",
+  author   = "Anjlai Silva",
+  year     = "2020",
+  url      = "https://github.com/anjalisilva/mixGaussian",
+  textVersion = paste(
+
+  )
+)
