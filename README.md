@@ -41,7 +41,7 @@ browseVignettes("mixGaussian")
 
 ## Details
 
-<div style="text-align:left"><img src="inst/extdata/MixtureGaussian.png" alt="MixtureGaussian" width="600" height="400"/>
+<div style="text-align:left"><img src="inst/extdata/MixtureGaussian.png" alt="MixtureGaussian" width="700" height="500"/>
 
 <div style="text-align:left">
 <div style="text-align:left">
