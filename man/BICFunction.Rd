@@ -51,9 +51,9 @@ Schwarz (1978). Formula: - 2 * logLikelihood + (nParameters * log(nObservations)
 \examples{
 
 # Generating simulated data
-G = 2 # number of true clusters/components
-dimension = 6
-nObservations = 1000
+G <- 2 # number of true clusters/components
+dimension <- 6
+nObservations <- 100
 piGTrue <- c(0.8, 0.2)
 
 set.seed(1234)

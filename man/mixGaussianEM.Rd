@@ -69,9 +69,9 @@ BIC and ICL.
 }
 \examples{
 # Generating simulated data
-G = 2 # number of true clusters/components
-dimension = 6
-nObservations = 1000
+G <- 2 # number of true clusters/components
+dimension <- 6
+nObservations <- 100
 piGTrue <- c(0.8, 0.2)
 
 set.seed(1234)
@@ -82,9 +82,9 @@ sigma2 <- diag(dimension) * 2
 
 # library(mvtnorm)
 component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
-dim(component1) # 52   6
+dim(component1)
 component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
-dim(component2) # 48   6
+dim(component2)
 dataset <- rbind(component1, component2)
 dim(dataset) # 100   6
 
