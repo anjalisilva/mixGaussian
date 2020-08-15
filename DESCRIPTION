@@ -18,4 +18,8 @@ Imports:
     stats,
     mvtnorm,
     cluster
-    
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
