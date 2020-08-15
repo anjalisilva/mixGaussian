@@ -80,7 +80,7 @@ mean2 <- rep(4, dimension)
 sigma1 <- diag(dimension) * 2
 sigma2 <- diag(dimension) * 2
 
-library(mvtnorm)
+# library(mvtnorm)
 component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 dim(component1) # 52   6
 component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
@@ -92,12 +92,12 @@ dim(dataset) # 100   6
 # pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
 
 # Cluster data
-clustOutput <- mixGaussianEM(dataset = dataset,
-                             membership = "none",
-                             gmin = 1,
-                             gmax = 5,
-                             initMethod = "kmeans",
-                             nInitIterations = 1)
+clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+                                          membership = "none",
+                                          gmin = 1,
+                                          gmax = 5,
+                                          initMethod = "kmeans",
+                                          nInitIterations = 1)
 
 }
 \references{

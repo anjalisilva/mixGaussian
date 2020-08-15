@@ -23,10 +23,9 @@ cluster size.}
 \item{nObservations}{A positive integer specifying the number of observations
 in the dataset analyzed.}
 
-\item{clusterRunOutput}{Output from mplnVariational, mplnMCMCParallel, or
-mplnMCMCNonParallel, if available. Default value is NA. If provided,
-the vector of cluster labels obtained by mclust::map() for best model
-will be provided in the output.}
+\item{clusterRunOutput}{Output from mixGaussianEM, if available. Default value
+is NA. If provided, the vector of cluster labels obtained by mclust::map()
+for best model will be provided in the output.}
 
 \item{gmin}{A positive integer specifying the minimum number of components
 to be considered in the clustering run.}
@@ -63,26 +62,26 @@ mean2 <- rep(4, dimension)
 sigma1 <- diag(dimension) * 0.2
 sigma2 <- diag(dimension) * 0.5
 
-library(mvtnorm)
+# library(mvtnorm)
 component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 dataset <- rbind(component1, component2)
 
 # Cluster data
-clustOutput <- mixGaussianEM(dataset = dataset,
-                             membership = "none",
-                             gmin = 1,
-                             gmax = 2,
-                             initMethod = "kmeans",
-                             nInitIterations = 1)
+clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+                                          membership = "none",
+                                          gmin = 1,
+                                          gmax = 2,
+                                          initMethod = "kmeans",
+                                          nInitIterations = 1)
 
 # Model selection
-BICmodel <- BICFunction(logLikelihood = clustOutput$logLikelihood,
-                         nParameters = clustOutput$numbParameters,
-                         nObservations = nrow(clustOutput$dataset),
-                         clusterRunOutput = clustOutput$allResults,
-                         gmin = clustOutput$gmin,
-                         gmax = clustOutput$gmax)
+BICmodel <- mixGaussian::BICFunction(logLikelihood = clustOutput$logLikelihood,
+                                     nParameters = clustOutput$numbParameters,
+                                     nObservations = nrow(clustOutput$dataset),
+                                     clusterRunOutput = clustOutput$allResults,
+                                     gmin = clustOutput$gmin,
+                                     gmax = clustOutput$gmax)
 
 }
 \references{

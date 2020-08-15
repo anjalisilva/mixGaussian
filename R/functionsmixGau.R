@@ -59,7 +59,7 @@
 #' sigma1 <- diag(dimension) * 2
 #' sigma2 <- diag(dimension) * 2
 #'
-#' library(mvtnorm)
+#' # library(mvtnorm)
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' dim(component1) # 52   6
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
@@ -71,12 +71,12 @@
 #' # pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussianEM(dataset = dataset,
-#'                              membership = "none",
-#'                              gmin = 1,
-#'                              gmax = 5,
-#'                              initMethod = "kmeans",
-#'                              nInitIterations = 1)
+#' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+#'                                           membership = "none",
+#'                                           gmin = 1,
+#'                                           gmax = 5,
+#'                                           initMethod = "kmeans",
+#'                                           nInitIterations = 1)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
@@ -85,10 +85,11 @@
 #' data via the EM algorithm. \emph{Journal of the Royal Statistical Society: Series B} 39, 1–38.
 #'
 #' @export
+#' @import stats
 #' @importFrom mclust map
 #' @importFrom mclust unmap
-#' @importFrom stats rmultinom
-#' @importFrom mvtnorm dmvnorm
+#' @import mvtnorm
+#' @import cluster
 #'
 mixGaussianEM <- function(dataset,
                           membership = "none",
@@ -708,16 +709,13 @@ calcParameters <- function(numberG,
 #'      each cluster size.
 #' @param nParameters A vector with number of parameters for each
 #'      cluster size.
-#' @param clusterRunOutput Output from mplnVariational, mplnMCMCParallel, or
-#'    mplnMCMCNonParallel, if available. Default value is NA. If provided,
-#'    the vector of cluster labels obtained by mclust::map() for best model
-#'    will be provided in the output.
+#' @param clusterRunOutput Output from mixGaussianEM, if available. Default
+#'    value is NA. If provided, the vector of cluster labels obtained by
+#'    mclust::map() for best model will be provided in the output.
 #' @param gmin A positive integer specifying the minimum number of components
 #'    to be considered in the clustering run.
 #' @param gmax A positive integer, >gmin, specifying the maximum number of
 #'    components to be considered in the clustering run.
-#' @param parallel TRUE or FALSE indicating if MPLNClust::mplnMCMCParallel
-#'    has been used.
 #'
 #' @return Returns an S3 object of class MPLN with results.
 #' \itemize{
@@ -743,25 +741,25 @@ calcParameters <- function(numberG,
 #' sigma1 <- diag(dimension) * 0.2
 #' sigma2 <- diag(dimension) * 0.5
 #'
-#' library(mvtnorm)
+#' # library(mvtnorm)
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 #' dataset <- rbind(component1, component2)
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussianEM(dataset = dataset,
-#'                              membership = "none",
-#'                              gmin = 1,
-#'                              gmax = 2,
-#'                              initMethod = "kmeans",
-#'                              nInitIterations = 1)
+#' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+#'                                           membership = "none",
+#'                                           gmin = 1,
+#'                                           gmax = 2,
+#'                                           initMethod = "kmeans",
+#'                                           nInitIterations = 1)
 #'
 #' # Model selection
-#' AICmodel <- AICFunction(logLikelihood = clustOutput$logLikelihood,
-#'                          nParameters = clustOutput$numbParameters,
-#'                          clusterRunOutput = clustOutput$allResults,
-#'                          gmin = clustOutput$gmin,
-#'                          gmax = clustOutput$gmax)
+#' AICmodel <- mixGaussian::AICFunction(logLikelihood = clustOutput$logLikelihood,
+#'                                      nParameters = clustOutput$numbParameters,
+#'                                      clusterRunOutput = clustOutput$allResults,
+#'                                      gmin = clustOutput$gmin,
+#'                                      gmax = clustOutput$gmax)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
@@ -837,16 +835,13 @@ AICFunction <- function(logLikelihood,
 #'      each cluster size.
 #' @param nParameters A vector with number of parameters for each
 #'      cluster size.
-#' @param clusterRunOutput Output from mplnVariational, mplnMCMCParallel, or
-#'    mplnMCMCNonParallel, if available. Default value is NA. If provided,
-#'    the vector of cluster labels obtained by mclust::map() for best model
-#'    will be provided in the output.
+#' @param clusterRunOutput Output from mixGaussianEM, if available. Default
+#'    value is NA. If provided, the vector of cluster labels obtained by
+#'    mclust::map() for best model will be provided in the output.
 #' @param gmin A positive integer specifying the minimum number of components
 #'    to be considered in the clustering run.
 #' @param gmax A positive integer, >gmin, specifying the maximum number of
 #'    components to be considered in the clustering run.
-#' @param parallel TRUE or FALSE indicating if MPLNClust::mplnMCMCParallel
-#'    has been used.
 #'
 #' @return Returns an S3 object of class MPLN with results.
 #' \itemize{
@@ -872,25 +867,25 @@ AICFunction <- function(logLikelihood,
 #' sigma1 <- diag(dimension) * 0.2
 #' sigma2 <- diag(dimension) * 0.5
 #'
-#' library(mvtnorm)
+#' # library(mvtnorm)
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 #' dataset <- rbind(component1, component2)
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussianEM(dataset = dataset,
-#'                              membership = "none",
-#'                              gmin = 1,
-#'                              gmax = 2,
-#'                              initMethod = "kmeans",
-#'                              nInitIterations = 1)
+#' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+#'                                           membership = "none",
+#'                                           gmin = 1,
+#'                                           gmax = 2,
+#'                                           initMethod = "kmeans",
+#'                                           nInitIterations = 1)
 #'
 #' # Model selection
-#' AIC3model <- AIC3Function(logLikelihood = clustOutput$logLikelihood,
-#'                            nParameters = clustOutput$numbParameters,
-#'                            clusterRunOutput = clustOutput$allResults,
-#'                            gmin = clustOutput$gmin,
-#'                            gmax = clustOutput$gmax)
+#' AIC3model <- mixGaussian::AIC3Function(logLikelihood = clustOutput$logLikelihood,
+#'                                        nParameters = clustOutput$numbParameters,
+#'                                        clusterRunOutput = clustOutput$allResults,
+#'                                        gmin = clustOutput$gmin,
+#'                                        gmax = clustOutput$gmax)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
@@ -973,10 +968,9 @@ AIC3Function <- function(logLikelihood,
 #'      cluster size.
 #' @param nObservations A positive integer specifying the number of observations
 #'      in the dataset analyzed.
-#' @param clusterRunOutput Output from mplnVariational, mplnMCMCParallel, or
-#'    mplnMCMCNonParallel, if available. Default value is NA. If provided,
-#'    the vector of cluster labels obtained by mclust::map() for best model
-#'    will be provided in the output.
+#' @param clusterRunOutput Output from mixGaussianEM, if available. Default value
+#'    is NA. If provided, the vector of cluster labels obtained by mclust::map()
+#'    for best model will be provided in the output.
 #' @param gmin A positive integer specifying the minimum number of components
 #'    to be considered in the clustering run.
 #' @param gmax A positive integer, >gmin, specifying the maximum number of
@@ -1006,26 +1000,26 @@ AIC3Function <- function(logLikelihood,
 #' sigma1 <- diag(dimension) * 0.2
 #' sigma2 <- diag(dimension) * 0.5
 #'
-#' library(mvtnorm)
+#' # library(mvtnorm)
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 #' dataset <- rbind(component1, component2)
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussianEM(dataset = dataset,
-#'                              membership = "none",
-#'                              gmin = 1,
-#'                              gmax = 2,
-#'                              initMethod = "kmeans",
-#'                              nInitIterations = 1)
+#' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+#'                                           membership = "none",
+#'                                           gmin = 1,
+#'                                           gmax = 2,
+#'                                           initMethod = "kmeans",
+#'                                           nInitIterations = 1)
 #'
 #' # Model selection
-#' BICmodel <- BICFunction(logLikelihood = clustOutput$logLikelihood,
-#'                          nParameters = clustOutput$numbParameters,
-#'                          nObservations = nrow(clustOutput$dataset),
-#'                          clusterRunOutput = clustOutput$allResults,
-#'                          gmin = clustOutput$gmin,
-#'                          gmax = clustOutput$gmax)
+#' BICmodel <- mixGaussian::BICFunction(logLikelihood = clustOutput$logLikelihood,
+#'                                      nParameters = clustOutput$numbParameters,
+#'                                      nObservations = nrow(clustOutput$dataset),
+#'                                      clusterRunOutput = clustOutput$allResults,
+#'                                      gmin = clustOutput$gmin,
+#'                                      gmax = clustOutput$gmax)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
@@ -1098,14 +1092,13 @@ BICFunction <- function(logLikelihood,
 #' Biernacki et al., (2000).
 #'
 #' @param logLikelihood A vector with value of final log-likelihoods for
-#'      each cluster size.
+#'    each cluster size.
 #' @param nParameters A vector with number of parameters for each
-#'      cluster size.
+#'    cluster size.
 #' @param nObservations A positive integer specifying the number of observations
-#'      in the dataset analyzed.
-#' @param clusterRunOutput Output from MPLNClust::mplnVariational,
-#'    MPLNClust::mplnMCMCParallel, or MPLNClust::mplnMCMCNonParallel functions.
-#'    Either clusterRunOutput or probaPost must be provided.
+#'    in the dataset analyzed.
+#' @param clusterRunOutput Output from mixGaussianEM function. Either clusterRunOutput
+#'    or probaPost must be provided.
 #' @param probaPost A list that is length (gmax - gmin + 1) containing posterior
 #'    probability at each g, for g = gmin:gmax. This argument is useful if
 #'    clustering output have been generated non-serially, e.g., g = 1:5 and
@@ -1140,26 +1133,26 @@ BICFunction <- function(logLikelihood,
 #' sigma1 <- diag(dimension) * 0.2
 #' sigma2 <- diag(dimension) * 0.5
 #'
-#' library(mvtnorm)
+#' # library(mvtnorm)
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 #' dataset <- rbind(component1, component2)
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussianEM(dataset = dataset,
-#'                              membership = "none",
-#'                              gmin = 1,
-#'                              gmax = 2,
-#'                              initMethod = "kmeans",
-#'                              nInitIterations = 1)
+#' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+#'                                           membership = "none",
+#'                                           gmin = 1,
+#'                                           gmax = 2,
+#'                                           initMethod = "kmeans",
+#'                                           nInitIterations = 1)
 #'
 #' # Model selection
-#' ICLmodel <- ICLFunction(logLikelihood = clustOutput$logLikelihood,
-#'                         nParameters = clustOutput$numbParameters,
-#'                         nObservations = nrow(clustOutput$dataset),
-#'                         clusterRunOutput = clustOutput$allResults,
-#'                         gmin = clustOutput$gmin,
-#'                         gmax = clustOutput$gmax)
+#' ICLmodel <- mixGaussian::ICLFunction(logLikelihood = clustOutput$logLikelihood,
+#'                                      nParameters = clustOutput$numbParameters,
+#'                                      nObservations = nrow(clustOutput$dataset),
+#'                                      clusterRunOutput = clustOutput$allResults,
+#'                                      gmin = clustOutput$gmin,
+#'                                      gmax = clustOutput$gmax)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'

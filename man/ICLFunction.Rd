@@ -24,9 +24,8 @@ cluster size.}
 \item{nObservations}{A positive integer specifying the number of observations
 in the dataset analyzed.}
 
-\item{clusterRunOutput}{Output from MPLNClust::mplnVariational,
-MPLNClust::mplnMCMCParallel, or MPLNClust::mplnMCMCNonParallel functions.
-Either clusterRunOutput or probaPost must be provided.}
+\item{clusterRunOutput}{Output from mixGaussianEM function. Either clusterRunOutput
+or probaPost must be provided.}
 
 \item{probaPost}{A list that is length (gmax - gmin + 1) containing posterior
 probability at each g, for g = gmin:gmax. This argument is useful if
@@ -69,26 +68,26 @@ mean2 <- rep(4, dimension)
 sigma1 <- diag(dimension) * 0.2
 sigma2 <- diag(dimension) * 0.5
 
-library(mvtnorm)
+# library(mvtnorm)
 component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 dataset <- rbind(component1, component2)
 
 # Cluster data
-clustOutput <- mixGaussianEM(dataset = dataset,
-                             membership = "none",
-                             gmin = 1,
-                             gmax = 2,
-                             initMethod = "kmeans",
-                             nInitIterations = 1)
+clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+                                          membership = "none",
+                                          gmin = 1,
+                                          gmax = 2,
+                                          initMethod = "kmeans",
+                                          nInitIterations = 1)
 
 # Model selection
-ICLmodel <- ICLFunction(logLikelihood = clustOutput$logLikelihood,
-                        nParameters = clustOutput$numbParameters,
-                        nObservations = nrow(clustOutput$dataset),
-                        clusterRunOutput = clustOutput$allResults,
-                        gmin = clustOutput$gmin,
-                        gmax = clustOutput$gmax)
+ICLmodel <- mixGaussian::ICLFunction(logLikelihood = clustOutput$logLikelihood,
+                                     nParameters = clustOutput$numbParameters,
+                                     nObservations = nrow(clustOutput$dataset),
+                                     clusterRunOutput = clustOutput$allResults,
+                                     gmin = clustOutput$gmin,
+                                     gmax = clustOutput$gmax)
 
 }
 \references{
