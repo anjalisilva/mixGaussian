@@ -41,9 +41,9 @@ Alternative, the Shiny app could be run:
 runMixGaussian()
 ```
 
-<div style="text-align:center"><img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="600" height="400"/>
+<div style="text-align:center"><img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="750" height="550"/>
 
-<div style="text-align:center"><img src="inst/extdata/ShinyBarPlotsShiny.png" alt="ShinyBarPlotsShiny" width="600" height="400"/>
+<div style="text-align:center"><img src="inst/extdata/ShinyBarPlotsShiny.png" alt="ShinyBarPlotsShiny" width="750" height="550"/>
   
  Figure: Shiny app for mixGaussian package showing cluster results.
 
