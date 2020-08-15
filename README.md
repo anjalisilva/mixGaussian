@@ -32,7 +32,7 @@ The shiny implementation of *mixGaussian*: __*runMixGaussian*__ (under construct
 lsf.str("package:mixGaussian")
 ```
 
-For tutorials and plot interpretation, refer to the vignette:
+For tutorials, refer to the vignette:
 
 ``` r
 browseVignettes("mixGaussian")
@@ -41,7 +41,7 @@ browseVignettes("mixGaussian")
 
 ## Details
 
-<div style="text-align:left"><img src="inst/extdata/MixtureGaussian.png" alt="MixtureGaussian" width="700" height="500"/>
+<div style="text-align:left"><img src="inst/extdata/MixtureGaussian.png" alt="MixtureGaussian" width="750" height="550"/>
 
 <div style="text-align:left">
 <div style="text-align:left">
