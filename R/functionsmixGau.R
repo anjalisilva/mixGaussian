@@ -81,6 +81,13 @@
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
 #' @references
+#' Aitken, A. C. (1926). A series formula for the roots of algebraic and transcendental equations.
+#' \emph{Proceedings of the Royal Society of Edinburgh}, 45, 14–22.
+#'
+#' B¨ohning, D., E. Dietz, R. Schaub, P. Schlattmann, and B. Lindsay (1994). The distribution
+#' of the likelihood ratio for mixtures of densities from the one-parameter exponential family.
+#' \emph{Annals of the Institute of Statistical Mathematics}, 46, 373–388.
+#'
 #' Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum likelihood from incomplete
 #' data via the EM algorithm. \emph{Journal of the Royal Statistical Society: Series B} 39, 1–38.
 #'
@@ -1249,6 +1256,43 @@ ICLFunction <- function(logLikelihood,
                      ICLMessage = ICLMessage)
   class(ICLresults) <- "ICL"
   return(ICLresults)
+}
+
+#' Launch Shiny App For Package mixGaussian
+#'
+#' A function that launches the shiny app for this package.
+#' The shiny app permit to perform clustering using mixtures
+#' of multivariate Gaussian distributions via EM. Model selection
+#' is performed using AIC, AIC3, BIC and ICL.
+#'
+#' @return No return value but open up a shiny page.
+#'
+#' @examples
+#' \dontrun{
+#' runMixGaussian()
+#' }
+#'
+#' @author Anjali Silva, \email{anjali.silva@uhnresearch.ca}
+#'
+#' @references
+#' Aitken, A. C. (1926). A series formula for the roots of algebraic and transcendental equations.
+#' \emph{Proceedings of the Royal Society of Edinburgh}, 45, 14–22.
+#'
+#' B¨ohning, D., E. Dietz, R. Schaub, P. Schlattmann, and B. Lindsay (1994). The distribution
+#' of the likelihood ratio for mixtures of densities from the one-parameter exponential family.
+#' \emph{Annals of the Institute of Statistical Mathematics}, 46, 373–388.
+#'
+#' Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum likelihood from incomplete
+#' data via the EM algorithm. \emph{Journal of the Royal Statistical Society: Series B} 39, 1–38.
+#'
+#' @export
+#' @importFrom shiny runApp
+#' @importFrom MPLNClust mplnVisualize
+runMixGaussian <- function() {
+  appDir <- system.file("shiny-scripts",
+                        package = "mixGaussian")
+  shiny::runApp(appDir, display.mode = "normal")
+  return()
 }
 
 # [END]

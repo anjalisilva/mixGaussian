@@ -101,6 +101,13 @@ clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
 
 }
 \references{
+Aitken, A. C. (1926). A series formula for the roots of algebraic and transcendental equations.
+\emph{Proceedings of the Royal Society of Edinburgh}, 45, 14–22.
+
+B¨ohning, D., E. Dietz, R. Schaub, P. Schlattmann, and B. Lindsay (1994). The distribution
+of the likelihood ratio for mixtures of densities from the one-parameter exponential family.
+\emph{Annals of the Institute of Statistical Mathematics}, 46, 373–388.
+
 Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum likelihood from incomplete
 data via the EM algorithm. \emph{Journal of the Royal Statistical Society: Series B} 39, 1–38.
 }
