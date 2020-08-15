@@ -102,7 +102,7 @@ mixGaussianEM <- function(dataset,
 
   # Performing checks
   if (typeof(dataset) != "double") {
-    stop("Dataset type needs to be integer.")
+    stop("Dataset type needs to be double")
   }
 
   if (is.matrix(dataset) != TRUE) {
@@ -249,6 +249,9 @@ mixGaussianEM <- function(dataset,
                   AICresults = aic,
                   AIC3results = aic3,
                   totalTime = finalTime)
+
+  class(RESULTS) <- "mixGaussianEM"
+  return(RESULTS)
 
 }
 
