@@ -4,6 +4,7 @@ citEntry(
   entry    = "Unpublished",
   title    = "Clustering Using Mixtures of Multivariate Gaussian Via EM",
   author   = "Anjlai Silva",
+  note = "Unpublished",
   year     = "2020",
   url      = "https://github.com/anjalisilva/mixGaussian",
   textVersion = paste(
