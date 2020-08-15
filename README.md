@@ -1,7 +1,7 @@
 # `mixGaussian`
 
 ## Description
-`mixGaussian` is a simple R package for performing clustering using mixtures of multivariate Gaussian distributions. Main function __*mixGaussianEM*__ permit to carry out model-based clustering. Information criteria (AIC, BIC, AIC3 and ICL) are offered for model selection. Function __*mixGaussianVisualize*__ (under construction) permit to visualize clustering results. Function __*mixGaussianDataGenerator*__ (under construction) is available to generate simlulation data. The shiny implementation of *mixGaussian* is available as __*runMixGaussian*__ (under construction). For more information, see details below.  
+`mixGaussian` is a simple R package for performing clustering using mixtures of multivariate Gaussian distributions. Main function __*mixGaussianEM*__ permit to carry out model-based clustering. Information criteria (AIC, BIC, AIC3 and ICL) are offered for model selection. The shiny implementation of *mixGaussian* is available as __*runMixGaussian*__. For more information, see details below.  
 
 ## Installation
 
@@ -16,17 +16,15 @@ library("mixGaussian")
 
 ## Overview
 
-`mixGaussian` contains 8 functions. 
+`mixGaussian` contains 6 functions. 
 
 For carrying out clustering of data using mixtures of multivariate Gaussian distributions via expectation-maximization (EM): __*mixGaussianEM*__. 
 
-For the purpose of generating simlulation data via mixtures of multivariate Gaussian distributions: __*mixGaussianDataGenerator*__ (under construction). 
-
-For visualizing clustering results: __*mixGaussianVisualize*__ (under construction). 
-
 Information criteria are offered for model selection: __*AICFunction*__, __*BICFunction*__, __*AIC3Function*__, __*ICLFunction*__. 
 
-The shiny implementation of *mixGaussian*: __*runMixGaussian*__ (under construction). To list all functions available in the package: 
+The shiny implementation of *mixGaussian*: __*runMixGaussian*__. 
+
+To list all functions available in the package: 
 
 ``` r
 lsf.str("package:mixGaussian")
@@ -37,6 +35,20 @@ For tutorials, refer to the vignette:
 ``` r
 browseVignettes("mixGaussian")
 ```
+
+Alternative, the Shiny app could be run:
+``` r
+runMixGaussian()
+```
+
+<div style="text-align:center"><img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="600" height="400"/>
+
+<div style="text-align:center"><img src="inst/extdata/ShinyBarPlotsShiny.png" alt="ShinyBarPlotsShiny" width="600" height="400"/>
+  
+ Figure: Shiny app for mixGaussian package showing cluster results.
+
+<div style="text-align:left">
+<div style="text-align:left">
 
 
 ## Details
