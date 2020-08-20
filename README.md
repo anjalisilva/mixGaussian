@@ -27,7 +27,7 @@ The shiny implementation of *mixGaussian*: __*runMixGaussian*__.
 To list all functions available in the package: 
 
 ``` r
-lsf.str("package:mixGaussian")
+ls("package:mixGaussian")
 ```
 
 For tutorials, refer to the vignette:
