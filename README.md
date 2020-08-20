@@ -38,7 +38,7 @@ browseVignettes("mixGaussian")
 
 Alternative, the Shiny app could be run:
 ``` r
-runMixGaussian()
+mixGaussian::runMixGaussian()
 ```
 
 <div style="text-align:center"><img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="750" height="550"/>
