@@ -30,13 +30,7 @@ To list all functions available in the package:
 ls("package:mixGaussian")
 ```
 
-For tutorials, refer to the vignette:
-
-``` r
-browseVignettes("mixGaussian")
-```
-
-Alternative, the Shiny app could be run:
+To run the Shiny app:
 ``` r
 mixGaussian::runMixGaussian()
 ```
@@ -63,6 +57,17 @@ For more details, see vignette.
 ## `mixGaussian` Specifics
 
 In `mixGaussian` the parameter and group membership estimation is carried out using the EM algorithm, because the complete-data consists of the unobserved group membership labels. To check the convergence of EM algorithm, a modified version of Aitken's acceleration criterion as outlined by B¨ohning et al., 1994 is used. Model selection is performed using AIC, BIC, AIC3 and ICL. For more details, see vignette.
+
+## Tutorials  
+  
+For tutorials and plot interpretation, refer to the vignette:
+
+``` r
+browseVignettes("mixGaussian")
+```
+
+or see [A tour of mixGaussian](https://github.com/anjalisilva/mixGaussian/blob/master/vignettes/Introduction_mixGaussian.Rmd).
+  
 
 
 ## Citation for Package
