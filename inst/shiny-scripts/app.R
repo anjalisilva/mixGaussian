@@ -258,25 +258,25 @@ server <- function(input, output) {
   # pairsplot - BIC
   output$pairsplotBIC <- renderPlot({
     if (!is.null(startclustering))
-    pairs(dataset, col = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels))
+    pairs(matrixInput(), col = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels))
   })
 
   # pairsplot - ICL
   output$pairsplotICL <- renderPlot({
     if (!is.null(startclustering))
-      pairs(dataset, col = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels))
+      pairs(matrixInput(), col = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels))
   })
 
   # pairsplot - AIC
   output$pairsplotAIC <- renderPlot({
     if (!is.null(startclustering))
-      pairs(dataset, col = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels))
+      pairs(matrixInput(), col = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels))
   })
 
   # pairsplot - AIC3
   output$pairsplotAIC3 <- renderPlot({
     if (!is.null(startclustering))
-      pairs(dataset, col = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels))
+      pairs(matrixInput(), col = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels))
   })
 
 
