@@ -62,6 +62,11 @@ ui <- fluidPage(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('BICvalues'), plotOutput('ICLvalues')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('AIC3values'), plotOutput('AICvalues')),
                            )),
+                  tabPanel("PairsPlots",
+                           fluidRow(
+                             splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotBIC"), plotOutput('pairsplotICL')),
+                             splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotAIC3"), plotOutput('pairsplotAIC')),
+                           )),
                   tabPanel("Heatmap",
                            fluidRow(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapBIC"), plotOutput('heatmapICL')),
@@ -248,6 +253,30 @@ server <- function(input, output) {
              main = paste("G vs AIC3 value"), xaxt="n")
         axis(1, at = seq(as.numeric(input$ngmin), as.numeric(input$ngmax), by = 1))
       }
+  })
+
+  # pairsplot - BIC
+  output$pairsplotBIC <- renderPlot({
+    if (!is.null(startclustering))
+    pairs(dataset, col = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels))
+  })
+
+  # pairsplot - ICL
+  output$pairsplotICL <- renderPlot({
+    if (!is.null(startclustering))
+      pairs(dataset, col = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels))
+  })
+
+  # pairsplot - AIC
+  output$pairsplotAIC <- renderPlot({
+    if (!is.null(startclustering))
+      pairs(dataset, col = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels))
+  })
+
+  # pairsplot - AIC3
+  output$pairsplotAIC3 <- renderPlot({
+    if (!is.null(startclustering))
+      pairs(dataset, col = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels))
   })
 
 
