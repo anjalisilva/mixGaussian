@@ -107,7 +107,7 @@ citation("mixGaussian")
 
 ## Maintainer
 
-* Anjali Silva (anjali.silva@uhnresearch.ca). 
+* Anjali Silva (anjali@alumni.uoguelph.ca). 
 
 
 ## Contributions
