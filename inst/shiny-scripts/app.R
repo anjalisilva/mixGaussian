@@ -89,23 +89,27 @@ ui <- fluidPage(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('BICvalues'), plotOutput('ICLvalues')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('AIC3values'), plotOutput('AICvalues')),
                            )),
-                  tabPanel("Pairs Plot: Model",
+                  tabPanel("Pairs Plot of Data",
                            fluidRow(
-                             h4("Pairs Plot of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("Pairs Plot of Input Data"),
+                             h4("Explanation: Pairs plot of input data, with each observation colored by component/cluster membership."),
                              h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotBIC"), plotOutput('pairsplotICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotAIC3"), plotOutput('pairsplotAIC')),
                            )),
-                  tabPanel("Heatmap: Model",
+                  tabPanel("Heatmap of Data",
                            fluidRow(
-                             h4("Heatmap of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("Heatmap of Input Data With Component/Cluster Membership"),
                              h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapBIC"), plotOutput('heatmapICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapAIC3"), plotOutput('heatmapAIC')),
                            )),
-                  tabPanel("Barplot: Model",
+                  tabPanel("Barplot of PostProbability",
                            fluidRow(
-                             h4("Barplot of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("Barplot of Posterior Probability"),
+                             h4("Explanation: Posterior probability of each observation belonging
+                                 to a component/cluster of the model selected by the model selection
+                                 criterion."),
                              h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("barPlotBIC"), plotOutput('barPlotICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("barPlotAIC3"), plotOutput('barPlotAIC'))
