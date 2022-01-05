@@ -1221,8 +1221,7 @@ ICLFunction <- function(logLikelihood,
         z <- clusterRunOutput[[g]]$probaPost
         mapz <- mclust::unmap(clusterRunOutput[[g]]$clusterlabels)
         # ICL[g] <- BIC[g] + sum(sapply(1:ncol(mapz), forICL))
-        ICL[g] <- BIC[g] + Reduce(`+`, (lapply(seq_along(1:ncol(mapz)), forICL)))
-
+        ICL[g] <- BIC[g] + Reduce(`+`, (lapply(seq_len(ncol(mapz)), forICL)))
     }
 
     # select best model
@@ -1240,7 +1239,7 @@ ICLFunction <- function(logLikelihood,
       mapz <- mclust::unmap(mclust::map(probaPost[[g]]))
       forICL <- function(g){sum(log(z[which(mapz[, g] == 1), g]))}
       # ICL[g] <- BIC[g] + sum(sapply(seq_along(1:ncol(mapz)), forICL))
-      ICL[g] <- BIC[g] + Reduce(`+`, (lapply(seq_along(1:ncol(mapz)), forICL)))
+      ICL[g] <- BIC[g] + Reduce(`+`, (lapply(seq_len(ncol(mapz)), forICL)))
     }
     ICLmodel <- seq(gmin, gmax, 1)[grep(min(ICL, na.rm = TRUE), ICL)]
     ICLmodelLabels <- mclust::map(probaPost[[grep(min(ICL, na.rm = TRUE), ICL)]])
