@@ -101,21 +101,22 @@ clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
 
 
 # Example 2: Access raw data made available with this package
-inputCountsPath <- system.file("extdata", "mixGaussianDataset.csv",
-                               package = "mixGaussian")
+# Not run
+# inputCountsPath <- system.file("extdata", "mixGaussianDataset.csv",
+#                               package = "mixGaussian")
 # Read data
-exampleData <- read.csv(file = inputCountsPath, header = TRUE)
-dim(exampleData) # 100  6
+# exampleData <- read.csv(file = inputCountsPath, header = TRUE)
+# dim(exampleData) # 1000  6
 # To see documentation for this dataset
 ?exampleData
 
 # Cluster data
-clustOutput <- mixGaussian::mixGaussianEM(dataset = exampleData,
-                                          membership = "none",
-                                          gmin = 1,
-                                          gmax = 5,
-                                          initMethod = "kmeans",
-                                          nInitIterations = 1)
+# clustOutput <- mixGaussian::mixGaussianEM(dataset = exampleData,
+#                                          membership = "none",
+#                                          gmin = 1,
+#                                          gmax = 5,
+#                                          initMethod = "kmeans",
+#                                          nInitIterations = 1)
 
 }
 \references{

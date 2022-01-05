@@ -56,6 +56,7 @@ sigma2 <- diag(dimension) * 0.5
 component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 dataset <- rbind(component1, component2)
+dim(dataset) # 100 6
 
 # Cluster data
 clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,

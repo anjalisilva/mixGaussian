@@ -80,21 +80,22 @@
 #'
 #'
 #' # Example 2: Access raw data made available with this package
-#' inputCountsPath <- system.file("extdata", "mixGaussianDataset.csv",
-#'                                package = "mixGaussian")
+#' # Not run
+#' # inputCountsPath <- system.file("extdata", "mixGaussianDataset.csv",
+#' #                               package = "mixGaussian")
 #' # Read data
-#' exampleData <- read.csv(file = inputCountsPath, header = TRUE)
-#' dim(exampleData) # 100  6
+#' # exampleData <- read.csv(file = inputCountsPath, header = TRUE)
+#' # dim(exampleData) # 1000  6
 #' # To see documentation for this dataset
 #' ?exampleData
 #'
 #' # Cluster data
-#' clustOutput <- mixGaussian::mixGaussianEM(dataset = exampleData,
-#'                                           membership = "none",
-#'                                           gmin = 1,
-#'                                           gmax = 5,
-#'                                           initMethod = "kmeans",
-#'                                           nInitIterations = 1)
+#' # clustOutput <- mixGaussian::mixGaussianEM(dataset = exampleData,
+#' #                                          membership = "none",
+#' #                                          gmin = 1,
+#' #                                          gmax = 5,
+#' #                                          initMethod = "kmeans",
+#' #                                          nInitIterations = 1)
 #'
 #' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
 #'
@@ -896,6 +897,7 @@ AICFunction <- function(logLikelihood,
 #' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
 #' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
 #' dataset <- rbind(component1, component2)
+#' dim(dataset) # 100 6
 #'
 #' # Cluster data
 #' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
