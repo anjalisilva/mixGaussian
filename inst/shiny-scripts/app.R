@@ -134,17 +134,16 @@ server <- function(input, output) {
   })
 
   clusterRunning <-  reactive({
-    max <- as.numeric(input$ngmax)
-    clustResults <- mixGaussian::mixGaussianEM(dataset = matrixInput(),
+      clustResults <- mixGaussian::mixGaussianEM(dataset = matrixInput(),
                                membership = "none",
                                gmin = as.numeric(input$ngmin),
                                gmax = as.numeric(input$ngmax),
                                initMethod = as.character(input$typeinitMethod),
                                nInitIterations = as.numeric(input$nInitIterations))
-    for(j in seq_len(max)) {
-      incProgress(amount = 0.1*j)
-      Sys.sleep(0.25)
-    }
+
+      incProgress(amount = 0.5)
+      Sys.sleep(0.5)
+
     return(clustResults)
   })
 
