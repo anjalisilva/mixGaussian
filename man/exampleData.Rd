@@ -48,10 +48,10 @@ as shown in example below.
 
 # library(mvtnorm)
 # component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1],
-                                 mean = mean1, sigma = sigma1)
+#                                mean = mean1, sigma = sigma1)
 # dim(component1) # 800   6
 # component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2],
-                                 mean = mean2, sigma = sigma2)
+#                                mean = mean2, sigma = sigma2)
 # dim(component2) # 200   6
 # exampleData <- rbind(component1, component2)
 # dim(exampleData) # 1000   6
