@@ -12,36 +12,54 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
 
-      tags$p("Provided a dataset, perform clustering and show
-              plots for models selected by BIC, ICL, AIC3 and AIC."),
-      tags$p("Import a dataset, such that rows should
-                         correspond to observations and columns correspond to
-                         variables in .csv format. Dataset must contain row
-                         names (in first column) and column names."),
+      tags$p("Welcome to Shiny App, part of the mixGaussian R package."),
+      # br() element to introduce extra vertical spacing ----
+      br(),
+      tags$b("Description: mixGaussian is an R package for performing
+              clustering using mixtures of multivariate Gaussian distributions.
+              It permits to carry out model-based clustering. Information
+              criteria (AIC, BIC, AIC3 and ICL) are offered for model selection.
+              For more details, see ?mixGaussianEM"),
+
+      # br() element to introduce extra vertical spacing ----
+      br(),
+      br(),
 
       # input
+      tags$p("Instructions: Below, enter or select values required to
+              perform the analysis. Default values are shown. Then
+              press 'Run'. Navigate through the different tabs to the
+              right to explore the results."),
+
+      # br() element to introduce extra vertical spacing ----
+      br(),
+
+      # input
+      uiOutput("tab"),
       fileInput(inputId = "file1",
-                label = "Select a dataset to import:",
+                label = "Select a dataset to analyze. File should be
+                         in .csv format with rows corresponding to
+                         observations and columns to samples.",
                 accept = ".csv"),
-      tags$p("Enter or select values required for clustering. Default
-                        values are shown."),
+      tags$p("Enter or select values required for clustering.
+             Default values are shown."),
       textInput(inputId = "ngmin",
-                label = "Enter gmin:", "1"),
+                label = "Enter the minimum number in the range to test, gmin:", "1"),
       textInput(inputId = "ngmax",
-                label = "Enter gmax:", "2"),
+                label = "Enter the maximum number in the range to test, gmax:", "2"),
       selectInput(inputId = 'typeinitMethod',
-                  label = 'Select initMethod:',
+                  label = 'Select initialization method, initMethod:',
                   choices = c("kmeans",
                               "random",
                               "medoids",
                               "clara",
                               "fanny")),
       textInput(inputId = "nInitIterations",
-                label = "Enter nInitIterations:", "1"),
+                label = "Enter the number of initialization iterations, nInitIterations:", "1"),
 
       # actionButton
       actionButton(inputId = "button2",
-                   label = "Start Clustering"),
+                   label = "Run"),
 
       # br() element to introduce extra vertical spacing -
       br(),
@@ -54,9 +72,15 @@ ui <- fluidPage(
 
       # Output: Tabet
       tabsetPanel(type = "tabs",
-                  tabPanel("Input PairsPlot", plotOutput("pairsplot")),
-                  tabPanel("Input Summary", verbatimTextOutput("textOut")),
-                  tabPanel("Cluster Results", verbatimTextOutput('clustering')),
+                  tabPanel("Pairs Plot",
+                           h3("Instructions: Enter values and click 'Run' at the bottom left side."),
+                           h3("Pairs Plot of Input Dataset:"),
+                           br(),
+                           plotOutput("pairsplot")),
+                  tabPanel("Input Summary",
+                           verbatimTextOutput("textOut")),
+                  tabPanel("Cluster Results",
+                           verbatimTextOutput('clustering')),
                   tabPanel("Model Selection",
                            fluidRow(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('BICvalues'), plotOutput('ICLvalues')),
@@ -473,6 +497,12 @@ server <- function(input, output) {
   # plot bar - AIC3
   output$barPlotAIC3 <- renderPlot({
     barPlottingAIC3()
+  })
+
+  # URL for downloading data
+  url <- a("Sample data", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  output$tab <- renderUI({
+    tagList("Download:", url)
   })
 
 }

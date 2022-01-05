@@ -68,7 +68,7 @@ estimation. Model selection is performed using AIC, AIC3,
 BIC and ICL.
 }
 \examples{
-# Generating simulated data
+# Example 1: Generating simulated data
 G <- 2 # number of true clusters/components
 dimension <- 6
 nObservations <- 100
@@ -93,6 +93,24 @@ dim(dataset) # 100   6
 
 # Cluster data
 clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
+                                          membership = "none",
+                                          gmin = 1,
+                                          gmax = 5,
+                                          initMethod = "kmeans",
+                                          nInitIterations = 1)
+
+
+# Example 2: Access raw data made available with this package
+inputCountsPath <- system.file("extdata", "mixGaussianDataset.csv",
+                               package = "mixGaussian")
+# Read data
+exampleData <- read.csv(file = inputCountsPath, header = TRUE)
+dim(exampleData) # 100  6
+# To see documentation for this dataset
+?exampleData
+
+# Cluster data
+clustOutput <- mixGaussian::mixGaussianEM(dataset = exampleData,
                                           membership = "none",
                                           gmin = 1,
                                           gmax = 5,
