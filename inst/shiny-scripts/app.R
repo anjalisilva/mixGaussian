@@ -12,7 +12,7 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
 
-      tags$p("Welcome to Shiny App, part of the mixGaussian R package."),
+      tags$p("Welcome to Shiny App of mixGaussian R package."),
       # br() element to introduce extra vertical spacing ----
       br(),
       tags$b("Description: mixGaussian is an R package for performing
@@ -44,18 +44,18 @@ ui <- fluidPage(
       tags$p("Enter or select values required for clustering.
              Default values are shown."),
       textInput(inputId = "ngmin",
-                label = "Enter the minimum number in the range to test, gmin:", "1"),
+                label = "Enter the minimum number in the range to test, gmin. This should be an integer:", "1"),
       textInput(inputId = "ngmax",
-                label = "Enter the maximum number in the range to test, gmax:", "2"),
+                label = "Enter the maximum number in the range to test, gmax. This should be an integer:", "2"),
       selectInput(inputId = 'typeinitMethod',
-                  label = 'Select initialization method, initMethod:',
+                  label = 'Select an initialization method, initMethod:',
                   choices = c("kmeans",
                               "random",
                               "medoids",
                               "clara",
                               "fanny")),
       textInput(inputId = "nInitIterations",
-                label = "Enter the number of initialization iterations, nInitIterations:", "1"),
+                label = "Enter the number of initialization iterations, nInitIterations. This should be an integer:", "1"),
 
       # actionButton
       actionButton(inputId = "button2",
@@ -73,8 +73,8 @@ ui <- fluidPage(
       # Output: Tabet
       tabsetPanel(type = "tabs",
                   tabPanel("Pairs Plot",
-                           h3("Instructions: Enter values and click 'Run' at the bottom left side."),
-                           h3("Pairs Plot of Input Dataset:"),
+                           h4("Instructions: Enter values and click 'Run' at the bottom left side."),
+                           h4("Pairs Plot of Input Dataset:"),
                            br(),
                            plotOutput("pairsplot")),
                   tabPanel("Input Summary",
@@ -86,18 +86,24 @@ ui <- fluidPage(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('BICvalues'), plotOutput('ICLvalues')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput('AIC3values'), plotOutput('AICvalues')),
                            )),
-                  tabPanel("PairsPlots",
+                  tabPanel("Pairs Plot: Model",
                            fluidRow(
+                             h4("Pairs Plot of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotBIC"), plotOutput('pairsplotICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("pairsplotAIC3"), plotOutput('pairsplotAIC')),
                            )),
-                  tabPanel("Heatmap",
+                  tabPanel("Heatmap: Model",
                            fluidRow(
+                             h4("Heatmap of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapBIC"), plotOutput('heatmapICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapAIC3"), plotOutput('heatmapAIC')),
                            )),
-                  tabPanel("Barplot",
+                  tabPanel("Barplot: Model",
                            fluidRow(
+                             h4("Barplot of Input Data: Colored by Model Selected via Each Criterion"),
+                             h4("1st row: BIC (left), ICL (right); 2nd row: AIC3 (left), AIC (right)"),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("barPlotBIC"), plotOutput('barPlotICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("barPlotAIC3"), plotOutput('barPlotAIC'))
                            ))
@@ -124,19 +130,32 @@ server <- function(input, output) {
                          row.names = 1))
   })
 
+  clusterRunning <-  reactive({
+    max <- as.numeric(input$ngmax)
+    clustResults <- mixGaussian::mixGaussianEM(dataset = matrixInput(),
+                               membership = "none",
+                               gmin = as.numeric(input$ngmin),
+                               gmax = as.numeric(input$ngmax),
+                               initMethod = as.character(input$typeinitMethod),
+                               nInitIterations = as.numeric(input$nInitIterations))
+    for(j in seq_len(max)) {
+      incProgress(1/max)
+      Sys.sleep(0.25)
+    }
+    return(clustResults)
+  })
 
-  startclustering <- eventReactive(eventExpr = input$button2, {
-    withProgress(message = 'Clustering', value = 0, {
-      # Number of times we'll go through the loop
+  ntext <- eventReactive(input$button2, {clusterRunning()})
 
-      mixGaussian::mixGaussianEM(dataset = matrixInput(),
-                                 membership = "none",
-                                 gmin = as.numeric(input$ngmin),
-                                 gmax = as.numeric(input$ngmax),
-                                 initMethod = as.character(input$typeinitMethod),
-                                 nInitIterations = as.numeric(input$nInitIterations))
+  startclustering <- eventReactive(input$button2, {
+
+    withProgress(message = 'Clustering', {
+      ntext()
     })
   })
+
+
+
 
   # Textoutput
   output$textOut <- renderPrint({
