@@ -1,5 +1,5 @@
-context("Checking for mixGaussian performance")
-library(mixGaussian)
+# context("Checking for mixGaussian performance")
+# library(mixGaussian)
 
 test_that("Checking clustering results", {
 

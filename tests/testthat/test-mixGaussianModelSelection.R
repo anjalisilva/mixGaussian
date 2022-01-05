@@ -1,5 +1,5 @@
-context("Checking for model selection performance")
-library(mixGaussian)
+# context("Checking for model selection performance")
+# library(mixGaussian)
 
 test_that("Checking AIC model selection", {
 

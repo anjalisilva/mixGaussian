@@ -1,4 +1,4 @@
 library(testthat)
-library(mixGaussian)
+# library(mixGaussian)
 
 test_check("mixGaussian")
