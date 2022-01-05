@@ -44,9 +44,11 @@ ui <- fluidPage(
       tags$p("Enter or select values required for clustering.
              Default values are shown."),
       textInput(inputId = "ngmin",
-                label = "Enter the minimum number in the range to test, gmin. This should be an integer:", "1"),
+                label = "Enter the minimum number in the range to test, gmin.
+                This should be a positive integer:", "1"),
       textInput(inputId = "ngmax",
-                label = "Enter the maximum number in the range to test, gmax. This should be an integer:", "2"),
+                label = "Enter the maximum number in the range to test, gmax.
+                This should be a positive integer:", "2"),
       selectInput(inputId = 'typeinitMethod',
                   label = 'Select an initialization method, initMethod:',
                   choices = c("kmeans",
@@ -55,7 +57,8 @@ ui <- fluidPage(
                               "clara",
                               "fanny")),
       textInput(inputId = "nInitIterations",
-                label = "Enter the number of initialization iterations, nInitIterations. This should be an integer:", "1"),
+                label = "Enter the number of initialization iterations, nInitIterations.
+                This should be a positive integer:", "1"),
 
       # actionButton
       actionButton(inputId = "button2",
@@ -139,7 +142,7 @@ server <- function(input, output) {
                                initMethod = as.character(input$typeinitMethod),
                                nInitIterations = as.numeric(input$nInitIterations))
     for(j in seq_len(max)) {
-      incProgress(1/max)
+      incProgress(amount = 0.1*j)
       Sys.sleep(0.25)
     }
     return(clustResults)
