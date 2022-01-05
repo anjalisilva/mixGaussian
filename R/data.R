@@ -1,0 +1,49 @@
+#' A Simulated Dataset With Two Components
+#'
+#' A simulated dataset with two components (G = 2),
+#' 100 observations (N = 100), and a dimensionality
+#' 6 (d = 6). Generated using mvtnorm::rmvnorm() function
+#' as shown in example below.
+#'
+#' @source A simulated dataset generated via mvtnorm::rmvnorm()
+#'         function as in example below.
+#'
+#' @format A matrix with 100 rows representing observations
+#'   and 6 column, representing samples.
+#'
+#'
+#' @examples
+#' # Access raw data made available with this package
+#' # inputCountsPath <- system.file("extdata",
+#' #                                "mixGaussianDataset.csv",
+#' #                                package = "mixGaussian")
+#'
+#' # Read data
+#' # exampleData <- read.csv(file = inputCountsPath, header = TRUE)
+#' # dim(exampleData) # 100  6
+#'
+#' # To see documentation for this dataset
+#' # ?exampleData
+#'
+#' # The below code shows how the exampleData was generated
+#' # G <- 2 # number of true clusters/components
+#' # dimension <- 6
+#' # nObservations <- 100
+#' # piGTrue <- c(0.8, 0.2)
+#'
+#' # set.seed(1234)
+#' # mean1 <- rep(1, dimension)
+#' # mean2 <- rep(4, dimension)
+#' # sigma1 <- diag(dimension) * 2
+#' # sigma2 <- diag(dimension) * 2
+#'
+#' # library(mvtnorm)
+#' # component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1],
+#'                                  mean = mean1, sigma = sigma1)
+#' # dim(component1)
+#' # component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2],
+#'                                  mean = mean2, sigma = sigma2)
+#' # dim(component2)
+#' # dataset <- rbind(component1, component2)
+#' # dim(dataset) # 100   6
+"exampleData"
