@@ -7,8 +7,8 @@ Mixtures of Multivariate Gaussian Model for Clustering Data
 
 <!-- badges: start -->
 <!-- https://www.codefactor.io/repository/github/anjalisilva/testingpackage/issues -->
+<!-- [![CodeFactor](https://www.codefactor.io/repository/github/anjalisilva/mixgaussian/badge)](https://www.codefactor.io/repository/github/anjalisilva/testingpackage)-->
 
-[![CodeFactor](https://www.codefactor.io/repository/github/anjalisilva/mixgaussian/badge)](https://www.codefactor.io/repository/github/anjalisilva/testingpackage)
 [![GitHub
 issues](https://img.shields.io/github/issues/anjalisilva/mixGaussian)](https://github.com/anjalisilva/mixGaussian/issues)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
