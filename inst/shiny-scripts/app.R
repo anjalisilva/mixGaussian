@@ -500,7 +500,7 @@ server <- function(input, output) {
   })
 
   # URL for downloading data
-  url <- a("Sample data", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  url <- a("Sample data (Right click and Save As... .csv file)", href="https://raw.githubusercontent.com/anjalisilva/mixGaussian/master/inst/extdata/mixGaussianDataset.csv")
   output$tab <- renderUI({
     tagList("Download:", url)
   })
