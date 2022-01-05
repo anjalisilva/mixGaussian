@@ -5,7 +5,7 @@
 \alias{exampleData}
 \title{A Simulated Dataset With Two Components}
 \format{
-A matrix with 100 rows representing observations
+A matrix with 1000 rows representing observations
 and 6 column, representing samples.
 }
 \source{
@@ -17,7 +17,7 @@ exampleData
 }
 \description{
 A simulated dataset with two components (G = 2),
-100 observations (N = 100), and a dimensionality
+1000 observations (N = 1000), and a dimensionality
 6 (d = 6). Generated using mvtnorm::rmvnorm() function
 as shown in example below.
 }
@@ -29,7 +29,7 @@ as shown in example below.
 
 # Read data
 # exampleData <- read.csv(file = inputCountsPath, header = TRUE)
-# dim(exampleData) # 100  6
+# dim(exampleData) # 1000  6
 
 # To see documentation for this dataset
 # ?exampleData
@@ -37,7 +37,7 @@ as shown in example below.
 # The below code shows how the exampleData was generated
 # G <- 2 # number of true clusters/components
 # dimension <- 6
-# nObservations <- 100
+# nObservations <- 1000
 # piGTrue <- c(0.8, 0.2)
 
 # set.seed(1234)
@@ -49,11 +49,11 @@ as shown in example below.
 # library(mvtnorm)
 # component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1],
                                  mean = mean1, sigma = sigma1)
-# dim(component1)
+# dim(component1) # 800   6
 # component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2],
                                  mean = mean2, sigma = sigma2)
-# dim(component2)
-# dataset <- rbind(component1, component2)
-# dim(dataset) # 100   6
+# dim(component2) # 200   6
+# exampleData <- rbind(component1, component2)
+# dim(exampleData) # 1000   6
 }
 \keyword{datasets}
