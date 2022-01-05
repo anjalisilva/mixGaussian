@@ -1,4 +1,4 @@
-library(shiny)
+# library(shiny)
 
 # Define UI for random distribution app ----
 ui <- fluidPage(
@@ -22,7 +22,7 @@ ui <- fluidPage(
       # input
       fileInput(inputId = "file1",
                 label = "Select a dataset to import:",
-                accept = c(".csv")),
+                accept = ".csv"),
       tags$p("Enter or select values required for clustering. Default
                         values are shown."),
       textInput(inputId = "ngmin",
