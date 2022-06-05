@@ -1309,7 +1309,10 @@ ICLFunction <- function(logLikelihood,
 #'
 #' @export
 #' @importFrom shiny runApp
-#' @importFrom MPLNClust mplnVisualize
+#' @importFrom MPLNClust mplnVisualizeAlluvial
+#' @importFrom MPLNClust mplnVisualizeBar
+#' @importFrom MPLNClust mplnVisualizeHeatmap
+#' @importFrom MPLNClust mplnVisualizeLine
 runMixGaussian <- function() {
   appDir <- system.file("shiny-scripts",
                         package = "mixGaussian")
