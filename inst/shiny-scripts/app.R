@@ -104,6 +104,13 @@ ui <- fluidPage(
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapBIC"), plotOutput('heatmapICL')),
                              splitLayout(cellWidths = c("50%", "50%"), plotOutput("heatmapAIC3"), plotOutput('heatmapAIC')),
                            )),
+                  tabPanel("Alluvial Plot",
+                           h3("Instructions: Enter values and click 'Run' at the bottom left side."),
+                           h3("Alluvial Plot of Input Dataset:"),
+                           h5("Note, the x-axis values are in the order of BIC, ICL, AIC, AIC3.
+                              Colors are assigned based on cluster membership of model selected via BIC."),
+                           br(),
+                           plotOutput("alluvialPlot")),
                   tabPanel("Barplot of PostProbability",
                            fluidRow(
                              h4("Barplot of Posterior Probability"),
@@ -333,12 +340,12 @@ server <- function(input, output) {
   # plot heatmap - BIC
   heatmapPlottingBIC <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
-      MPLNClust::mplnVisualize(
-        dataset = matrixInput(),
-        plots = "heatmaps",
-        clusterMembershipVector = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels),
-        printPlot = FALSE)
+      mplnVisualizeHeatmap(dataset = matrixInput(),
+                           clusterMembershipVector =
+                           as.numeric(startclustering()$BICresults$BICmodelSelectedLabels),
+                           printPlot = FALSE)
   })
+
 
   # plot heatmap - BIC
   output$heatmapBIC <- renderPlot({
@@ -351,17 +358,15 @@ server <- function(input, output) {
   barPlottingBIC <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
       if ((as.numeric(input$ngmax) - as.numeric(input$ngmin) + 1) == 1) {
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[1]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels),
           printPlot = FALSE)
       } else {
         modelSelect <- which(seq(as.numeric(input$ngmin), as.numeric(input$ngmax), 1) == startclustering()$BICresults$BICmodelselected)
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[as.numeric(modelSelect)]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$BICresults$BICmodelSelectedLabels),
           printPlot = FALSE)
@@ -381,11 +386,10 @@ server <- function(input, output) {
   # plot heatmap - ICL
   heatmapPlottingICL <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
-      MPLNClust::mplnVisualize(
-        dataset = matrixInput(),
-        plots = "heatmaps",
-        clusterMembershipVector = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels),
-        printPlot = FALSE)
+      mplnVisualizeHeatmap(dataset = matrixInput(),
+                           clusterMembershipVector =
+                             as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels),
+                           printPlot = FALSE)
   })
 
   # plot heatmap - ICL
@@ -399,17 +403,15 @@ server <- function(input, output) {
   barPlottingICL <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
       if ((as.numeric(input$ngmax) - as.numeric(input$ngmin) + 1) == 1) {
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[1]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels),
           printPlot = FALSE)
       } else {
         modelSelect <- which(seq(as.numeric(input$ngmin), as.numeric(input$ngmax), 1) == startclustering()$ICLresults$ICLmodelselected)
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[as.numeric(modelSelect)]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels),
           printPlot = FALSE)
@@ -429,15 +431,13 @@ server <- function(input, output) {
 
 
 
-
   # plot heatmap - AIC
   heatmapPlottingAIC <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
-      MPLNClust::mplnVisualize(
-        dataset = matrixInput(),
-        plots = "heatmaps",
-        clusterMembershipVector = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels),
-        printPlot = FALSE)
+      mplnVisualizeHeatmap(dataset = matrixInput(),
+                           clusterMembershipVector =
+                             as.numeric(startclustering()$AICresults$AICmodelSelectedLabels),
+                           printPlot = FALSE)
   })
 
   # plot heatmap - AIC
@@ -451,17 +451,15 @@ server <- function(input, output) {
   barPlottingAIC <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
       if ((as.numeric(input$ngmax) - as.numeric(input$ngmin) + 1) == 1) {
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[1]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels),
           printPlot = FALSE)
       } else {
         modelSelect <- which(seq(as.numeric(input$ngmin), as.numeric(input$ngmax), 1) == startclustering()$AICresults$AICmodelselected)
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[as.numeric(modelSelect)]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$AICresults$AICmodelSelectedLabels),
           printPlot = FALSE)
@@ -484,11 +482,10 @@ server <- function(input, output) {
   # plot heatmap - AIC3
   heatmapPlottingAIC3 <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
-      MPLNClust::mplnVisualize(
-        dataset = matrixInput(),
-        plots = "heatmaps",
-        clusterMembershipVector = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels),
-        printPlot = FALSE)
+      mplnVisualizeHeatmap(dataset = matrixInput(),
+                           clusterMembershipVector =
+                             as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels),
+                           printPlot = FALSE)
   })
 
   # plot heatmap - AIC3
@@ -502,17 +499,15 @@ server <- function(input, output) {
   barPlottingAIC3 <- eventReactive(eventExpr = input$button2, {
     if (!is.null(startclustering))
       if ((as.numeric(input$ngmax) - as.numeric(input$ngmin) + 1) == 1) {
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[1]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels),
           printPlot = FALSE)
       } else {
         modelSelect <- which(seq(as.numeric(input$ngmin), as.numeric(input$ngmax), 1) == startclustering()$AIC3results$AIC3modelselected)
-        MPLNClust::mplnVisualize(
+        mplnVisualizeBar(
           dataset = matrixInput(),
-          plots = "bar",
           probabilities = as.matrix(startclustering()$allResults[[as.numeric(modelSelect)]]$probaPost),
           clusterMembershipVector = as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels),
           printPlot = FALSE)
@@ -524,11 +519,34 @@ server <- function(input, output) {
     barPlottingAIC3()
   })
 
+
   # URL for downloading data
   url <- a("Sample data (Right click and Save As... .csv file)", href="https://raw.githubusercontent.com/anjalisilva/mixGaussian/master/inst/extdata/mixGaussianDataset.csv")
   output$tab <- renderUI({
     tagList("Download:", url)
   })
+
+  # Alluvial plot
+  alluvialPlotting <- eventReactive(eventExpr = input$button2, {
+    if (!is.null(startclustering))
+      mplnVisualizeAlluvial(nObservations = nrow(matrixInput()),
+                            firstGrouping =
+                              as.numeric(startclustering()$BICresults$BICmodelSelectedLabels),
+                            secondGrouping =
+                              as.numeric(startclustering()$ICLresults$ICLmodelSelectedLabels),
+                            thirdGrouping =
+                              as.numeric(startclustering()$AICresults$AICmodelSelectedLabels),
+                            fourthGrouping =
+                              as.numeric(startclustering()$AIC3results$AIC3modelSelectedLabels),
+                            fileName = 'alluvial',
+                            printPlot = FALSE)
+  })
+
+  # Alluvial Plot
+  output$alluvialPlot <- renderPlot({
+    alluvialPlotting()
+  })
+
 
 }
 
