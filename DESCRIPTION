@@ -2,15 +2,15 @@ Package: mixGaussian
 Type: Package
 Title: Mixtures of Multivariate Gaussian Model for Clustering Data
 Version: 0.1.0
-Authors@R: person("Anjali", "Silva", email = "anjali.silva@uhnresearch.ca", role = c("aut", "cre"))
-Maintainer: Anjali Silva <anjali.silva@uhnresearch.ca>
+Authors@R: person("Anjali", "Silva", email = "anjali@alumni.uoguelph.ca", role = c("aut", "cre"))
+Maintainer: Anjali Silva <anjali@alumni.uoguelph.ca>
 Description: Performs clustering using mixtures of multivariate Gaussian distribution and
     model selection using AIC, AIC3, BIC and ICL. Permit to visualize clustering results.
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.2
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/anjalisilva/mixGaussian
 Imports: 
