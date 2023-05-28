@@ -24,7 +24,7 @@
 #'    the run with highest log-likelihood will be used as initialization
 #'    values. Default is 2.
 #'
-#' @return Returns an S3 object of class mplnVariational with results.
+#' @return Returns an S3 object of class mixGaussianCluss with results.
 #' \itemize{
 #'   \item dataset - The input dataset on which clustering is performed.
 #'   \item dimensionality - Dimensionality of the input dataset.
@@ -276,7 +276,7 @@ mixGaussianEM <- function(dataset,
                   AIC3results = aic3,
                   totalTime = finalTime)
 
-  class(RESULTS) <- "mixGaussianEM"
+  class(RESULTS) <- "mixGaussianCluss"
   return(RESULTS)
 
 }
