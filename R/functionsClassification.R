@@ -53,12 +53,14 @@
 #'
 #' @examples
 #' # Example 1: Generating simulated data
+#' set.seed(1234)
 #' G <- 2 # number of true clusters/components
 #' dimension <- 6
 #' nObservations <- 100
-#' piGTrue <- c(0.8, 0.2)
+#' membershipTrue <- sample(c(1, 2), 100, replace = TRUE)
+#' piGTrue <- table(membershipTrue)/nObservations
 #'
-#' set.seed(1234)
+#' # Simulate parameter values
 #' mean1 <- rep(1, dimension)
 #' mean2 <- rep(4, dimension)
 #' sigma1 <- diag(dimension) * 2
@@ -75,9 +77,19 @@
 #' # Visualize data
 #' # pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
 #'
-#' # Cluster data
+#' # Classification membership vector
+#' membershipClass <- membershipTrue
+#' membershipClass[x = sample(c(1:100),
+#'                 size = 10,
+#'                 replace = FALSE)] <- 0
+#' table(membershipClass)
+#' #  0  1  2
+#' # 10 44 46
+#'
+#' # Classify data, where cluster membership of observations
+#' # with membership indicated by 0 are unknown
 #' clustOutput <- mixGaussian::mixGaussianEM(dataset = dataset,
-#'                                           membership = "none",
+#'                                           membership = membershipClass,
 #'                                           gmin = 1,
 #'                                           gmax = 5,
 #'                                           initMethod = "kmeans",
@@ -102,7 +114,7 @@
 #' #                                          initMethod = "kmeans",
 #' #                                          nInitIterations = 1)
 #'
-#' @author {Anjali Silva, \email{anjali.silva@uhnresearch.ca}}
+#' @author {Anjali Silva, \email{anjali@alumni.uoguelph.ca}}
 #'
 #' @references
 #' Aitken, A. C. (1926). A series formula for the roots of algebraic and transcendental equations.
@@ -122,7 +134,7 @@
 #' @import mvtnorm
 #' @import cluster
 #'
-mixGaussianEM <- function(dataset,
+mixGaussianClassEM <- function(dataset,
                           membership = "none",
                           gmin,
                           gmax,
@@ -210,9 +222,10 @@ mixGaussianEM <- function(dataset,
       clustersize <- seq(gmin, gmax, 1)[gmodel]
     }
     cat("\n Running for g =", clustersize)
-    clusterResults[[gmodel]] <- mixGaussianClust(dataset = dataset,
+    clusterResults[[gmodel]] <- mixGaussianClass(dataset = dataset,
                                                  initMethod = initMethod,
                                                  nInitIterations = nInitIterations,
+                                                 membership = membership,
                                                  G = clustersize,
                                                  maxIterations = 1000)
   }
@@ -285,3 +298,166 @@ mixGaussianEM <- function(dataset,
   return(RESULTS)
 
 }
+
+mixGaussianClass <- function(dataset,
+                             G,
+                             initMethod,
+                             nInitIterations,
+                             maxIterations) {
+
+  dimensionality <- ncol(dataset)
+  nObservations <- nrow(dataset)
+
+  # If no intialization is requested by user
+  if (nInitIterations == 0) {
+
+    # basic initialization performed for parameters
+    mu <- sigma <- num <- list()
+
+    # kmeans initialization
+    zValue <- matrix(0, ncol = G, nrow = nObservations)
+
+    # if z generated doesn't add up to nObservations, then use random initialization
+    if (sum(colSums(zValue)) != nObservations) {
+      zValue <- t(stats::rmultinom(nObservations, size = 1,
+                                   prob = rep(1 / G, G)))
+    }
+    # if z generated has less columns than numbG, then use random initialization
+    if(ncol(zValue) < G) {
+      zValue <- t(stats::rmultinom(nObservations, size = 1,
+                                   prob = rep(1 / G, G)))
+    }
+
+    piG <- colSums(zValue) / nObservations
+
+
+    for (g in 1:G) {
+      obs <- which(zValue[ , g] == 1)
+      mu[[g]] <- colMeans(dataset[obs, ]) # starting value for mu
+      sigma[[g]] <- var(dataset[obs, ]) # starting value for sample covariance matrix
+    }
+
+  } else if (nInitIterations != 0) {
+    # if initialization is requested by user
+
+    initializationResults <- mixGaussianInit(dataset = dataset,
+                                             numbG = G,
+                                             initMethod = initMethod,
+                                             nInitIterations = nInitIterations)
+
+    mu <- initializationResults$mu
+    sigma <- initializationResults$sigma
+    zValue <- initializationResults$zValue
+    piG <- colSums(zValue) / nObservations
+
+    # other variables
+    num <- list()
+  }
+
+
+
+  # Start clustering
+  itOuter <- 1
+  aloglik <- logLikelihood <- NULL
+  conv <- aloglik[c(1, 2, 3)] <- 0
+
+  while(! conv) {
+
+    # Updating mu
+    for(g in 1:G){
+      mu[[g]] <- colSums(zValue[ , g] * dataset) / sum(zValue[ , g])
+    }
+
+    # Updating covariance matrix
+    for(g in 1:G){
+      for(i in 1:nObservations){
+        num[[i]] <- zValue[i, g]*((dataset[i, ] - mu[[g]])%*%(t(dataset[i, ] - mu[[g]])))
+      }
+      sigma[[g]] <- Reduce('+', num)/(colSums(zValue)[g])
+    }
+
+    # Update pig
+    piG <- colSums(zValue) / nObservations
+
+
+    # Update zvalue
+    tempZ <- matrix(0, nObservations, G) # Temporary group membership (z) values
+    for(g in 1:G) {
+      tempZ[, g] <- piG[g] * mvtnorm::dmvnorm(x = dataset,
+                                              mean = mu[[g]],
+                                              sigma = sigma[[g]])
+    }
+
+    # Calculate zValue value
+    # check which tempZ == 0 and rowSums(tempZ)==0 and which of these
+    # have both equalling to 0 (because 0/0 = NaN)
+    if (G == 1) {
+      errorpossible <- Reduce(intersect,
+                              list(which(tempZ == 0),
+                                   which(rowSums(tempZ) == 0)))
+      tempZ[errorpossible] <- 1e-100
+      zValue <- tempZ / rowSums(tempZ)
+    } else {
+
+      # check for error, if rowsums are zero
+      rowSumsZero <- which(rowSums(tempZ) == 0)
+      if(length(rowSumsZero) > 1) {
+        tempZ[rowSumsZero, ] <- mclust::unmap(stats::kmeans(log(dataset + 1 / 6),
+                                                            centers = G,
+                                                            nstart = 100)$cluster)[rowSumsZero, ]
+        zValue <- tempZ / rowSums(tempZ)
+      } else {
+        zValue <- tempZ / rowSums(tempZ)
+      }
+    }
+
+
+
+    # Calculate log-likelihood
+    logLikelihood[itOuter] <- sum(log(rowSums(tempZ)))
+
+
+    # Stopping criterion
+    if (itOuter > 2) {
+      if ((logLikelihood[itOuter - 1] - logLikelihood[itOuter - 2]) == 0) {
+        conv <-1
+      } else {
+        # Aitken stopping criterion
+        termAitkens <- (logLikelihood[itOuter]- logLikelihood[itOuter - 1]) /
+          (logLikelihood[itOuter - 1] - logLikelihood[itOuter - 2])
+        term2Aitkens <- (1 / (1 - termAitkens) * (logLikelihood[itOuter] -
+                                                    logLikelihood[itOuter - 1]))
+        aloglik[itOuter] <- logLikelihood[itOuter - 1] + term2Aitkens
+        if (abs(aloglik[itOuter] - logLikelihood[itOuter - 1]) < 0.001) {
+          # If this critera, as per Böhning et al., 1994 is achieved
+          # convergence is achieved
+          conv <- 1
+        } else {
+          conv <- conv
+        }
+      }
+
+    }
+
+    # Update iteration
+    itOuter <- itOuter + 1
+    if (itOuter == maxIterations) {
+      checks <- 1
+    }
+  }
+
+  # Naming parameters
+  names(mu) <- names(sigma) <- paste0(rep("G=", G), 1:G)
+
+  # Saving results for output
+  Results <- list(piG = piG,
+                  mu = mu,
+                  sigma = sigma,
+                  probaPost = zValue,
+                  clusterlabels = mclust::map(zValue),
+                  logLikelihood = logLikelihood)
+
+  class(Results) <- "mixGaussianClustering"
+  return(Results)
+}
+
