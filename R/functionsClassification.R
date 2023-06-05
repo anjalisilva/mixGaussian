@@ -58,24 +58,31 @@
 #' dimension <- 6
 #' nObservations <- 100
 #' membershipTrue <- sample(c(1, 2), 100, replace = TRUE)
-#' piGTrue <- table(membershipTrue)/nObservations
+#' piGTrue <- table(membershipTrue) / nObservations
 #'
 #' # Simulate parameter values
 #' mean1 <- rep(1, dimension)
-#' mean2 <- rep(4, dimension)
+#' mean2 <- rep(5, dimension)
 #' sigma1 <- diag(dimension) * 2
-#' sigma2 <- diag(dimension) * 2
+#' sigma2 <- diag(dimension) *1
 #'
 #' # library(mvtnorm)
-#' component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
+#' component1 <- mvtnorm::rmvnorm(
+#'                 n = as.numeric(nObservations * piGTrue[1]),
+#'                 mean = mean1,
+#'                 sigma = sigma1)
 #' dim(component1)
-#' component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
+#' component2 <- mvtnorm::rmvnorm(
+#'                 n = 100 - as.numeric(nObservations * piGTrue[1]),
+#'                 mean = mean2,
+#'                 sigma = sigma2)
 #' dim(component2)
 #' dataset <- rbind(component1, component2)
 #' dim(dataset) # 100   6
 #'
 #' # Visualize data
-#' # pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
+#' pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]),
+#'                          rep(3, nObservations * piGTrue[2])))
 #'
 #' # Classification membership vector
 #' membershipClass <- membershipTrue
@@ -84,7 +91,7 @@
 #'                 replace = FALSE)] <- 0
 #' table(membershipClass)
 #' #  0  1  2
-#' # 10 44 46
+#' # 10 38 52
 #'
 #' # Classify data, where cluster membership of observations
 #' # with membership indicated by 0 are unknown
@@ -303,6 +310,7 @@ mixGaussianClass <- function(dataset,
                              G,
                              initMethod,
                              nInitIterations,
+                             membership,
                              maxIterations) {
 
   dimensionality <- ncol(dataset)
@@ -317,25 +325,25 @@ mixGaussianClass <- function(dataset,
     # kmeans initialization
     zValue <- matrix(0, ncol = G, nrow = nObservations)
 
-    # if z generated doesn't add up to nObservations, then use random initialization
-    if (sum(colSums(zValue)) != nObservations) {
-      zValue <- t(stats::rmultinom(nObservations, size = 1,
-                                   prob = rep(1 / G, G)))
+    clsInd <- (membership == 0)
+    for (i in 1:nObservations) {
+      if(clsInd[i]) { # if no membership known
+        zValue[i, ] <- 1 / G
+      } else {
+          zValue[i, membership[i]] <- 1
+      }
     }
-    # if z generated has less columns than numbG, then use random initialization
-    if(ncol(zValue) < G) {
-      zValue <- t(stats::rmultinom(nObservations, size = 1,
-                                   prob = rep(1 / G, G)))
-    }
+    z1 <- as.vector(t(zValue))
 
     piG <- colSums(zValue) / nObservations
 
 
     for (g in 1:G) {
-      obs <- which(zValue[ , g] == 1)
-      mu[[g]] <- colMeans(dataset[obs, ]) # starting value for mu
-      sigma[[g]] <- var(dataset[obs, ]) # starting value for sample covariance matrix
+        obs <- which(zValue[, g] == 1)
+        mu[[g]] <- colMeans(dataset[obs, ]) # starting value for mu
+        sigma[[g]] <- var(dataset[obs, ]) # starting value for sample covariance matrix
     }
+
 
   } else if (nInitIterations != 0) {
     # if initialization is requested by user
@@ -356,66 +364,53 @@ mixGaussianClass <- function(dataset,
 
 
 
-  # Start clustering
+  # Start classification
   itOuter <- 1
   aloglik <- logLikelihood <- NULL
   conv <- aloglik[c(1, 2, 3)] <- 0
 
   while(! conv) {
 
-    # Updating mu
+    # Updating mu using known
+    # membership values
     for(g in 1:G){
-      mu[[g]] <- colSums(zValue[ , g] * dataset) / sum(zValue[ , g])
+      mu[[g]] <- colSums(zValue[!clsInd, g] * dataset[!clsInd, ]) /
+        sum(zValue[!clsInd, g])
     }
 
     # Updating covariance matrix
+    # using known membership values
     for(g in 1:G){
-      for(i in 1:nObservations){
+      labelledObs <- c(1:nObservations)[!clsInd] # labelled observations
+      for(i in labelledObs){ # only calculate for labelled observations
         num[[i]] <- zValue[i, g]*((dataset[i, ] - mu[[g]])%*%(t(dataset[i, ] - mu[[g]])))
       }
-      sigma[[g]] <- Reduce('+', num)/(colSums(zValue)[g])
+      sigma[[g]] <- Reduce('+', num)/sum(zValue[!clsInd, g])
     }
 
-    # Update pig
-    piG <- colSums(zValue) / nObservations
 
 
-    # Update zvalue
-    tempZ <- matrix(0, nObservations, G) # Temporary group membership (z) values
+    # Update zvalue for unknown memberships
+    # Temporary group membership (z) values
+    tempZ <- matrix(0, length(which(clsInd == TRUE)), G)
+
     for(g in 1:G) {
-      tempZ[, g] <- piG[g] * mvtnorm::dmvnorm(x = dataset,
+      tempZ[which(clsInd == TRUE), g] <- piG[g] * mvtnorm::dmvnorm(x = dataset[clsInd, ],
                                               mean = mu[[g]],
                                               sigma = sigma[[g]])
     }
 
-    # Calculate zValue value
-    # check which tempZ == 0 and rowSums(tempZ)==0 and which of these
-    # have both equalling to 0 (because 0/0 = NaN)
-    if (G == 1) {
-      errorpossible <- Reduce(intersect,
-                              list(which(tempZ == 0),
-                                   which(rowSums(tempZ) == 0)))
-      tempZ[errorpossible] <- 1e-100
-      zValue <- tempZ / rowSums(tempZ)
-    } else {
-
-      # check for error, if rowsums are zero
-      rowSumsZero <- which(rowSums(tempZ) == 0)
-      if(length(rowSumsZero) > 1) {
-        tempZ[rowSumsZero, ] <- mclust::unmap(stats::kmeans(log(dataset + 1 / 6),
-                                                            centers = G,
-                                                            nstart = 100)$cluster)[rowSumsZero, ]
-        zValue <- tempZ / rowSums(tempZ)
-      } else {
-        zValue <- tempZ / rowSums(tempZ)
-      }
-    }
-
+    # Calculate zValue value for unlabeled observations
+    zValueUnobserved <- tempZ / rowSums(tempZ)
+    zValue[which(clsInd == TRUE), ] <- zValueUnobserved
 
 
     # Calculate log-likelihood
-    logLikelihood[itOuter] <- sum(log(rowSums(tempZ)))
+    logLikelihood[itOuter] <- sum(log(rowSums(zValue)))
 
+
+    # Update pig
+    piG <- colSums(zValue) / nObservations
 
     # Stopping criterion
     if (itOuter > 2) {
