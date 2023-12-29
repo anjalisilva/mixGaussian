@@ -30,7 +30,7 @@ test_that("Checking clustering results", {
 
 
   expect_that(length(clustOutput), equals(14))
-  expect_that(clustOutput, is_a("mixGaussianEM"))
+  expect_that(clustOutput, is_a("mixGaussianCluss"))
   expect_that(clustOutput$initalizationMethod, equals("kmeans"))
   numPara <- c(20, 41, 62)
   expect_that(clustOutput$numbParameters, equals(numPara))
