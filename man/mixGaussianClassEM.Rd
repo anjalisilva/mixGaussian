@@ -79,24 +79,31 @@ G <- 2 # number of true clusters/components
 dimension <- 6
 nObservations <- 100
 membershipTrue <- sample(c(1, 2), 100, replace = TRUE)
-piGTrue <- table(membershipTrue)/nObservations
+piGTrue <- table(membershipTrue) / nObservations
 
 # Simulate parameter values
 mean1 <- rep(1, dimension)
-mean2 <- rep(4, dimension)
+mean2 <- rep(5, dimension)
 sigma1 <- diag(dimension) * 2
-sigma2 <- diag(dimension) * 2
+sigma2 <- diag(dimension) *1
 
 # library(mvtnorm)
-component1 <- mvtnorm::rmvnorm(nObservations * piGTrue[1], mean = mean1, sigma = sigma1)
+component1 <- mvtnorm::rmvnorm(
+                n = as.numeric(nObservations * piGTrue[1]),
+                mean = mean1,
+                sigma = sigma1)
 dim(component1)
-component2 <- mvtnorm::rmvnorm(nObservations * piGTrue[2], mean = mean2, sigma = sigma2)
+component2 <- mvtnorm::rmvnorm(
+                n = 100 - as.numeric(nObservations * piGTrue[1]),
+                mean = mean2,
+                sigma = sigma2)
 dim(component2)
 dataset <- rbind(component1, component2)
 dim(dataset) # 100   6
 
 # Visualize data
-# pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]), rep(3, nObservations * piGTrue[2])))
+pairs(dataset, col = c(rep(2, nObservations * piGTrue[1]),
+                         rep(3, nObservations * piGTrue[2])))
 
 # Classification membership vector
 membershipClass <- membershipTrue
@@ -105,7 +112,7 @@ membershipClass[x = sample(c(1:100),
                 replace = FALSE)] <- 0
 table(membershipClass)
 #  0  1  2
-# 10 44 46
+# 10 38 52
 
 # Classify data, where cluster membership of observations
 # with membership indicated by 0 are unknown

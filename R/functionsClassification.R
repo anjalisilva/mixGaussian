@@ -320,7 +320,7 @@ mixGaussianClass <- function(dataset,
   if (nInitIterations == 0) {
 
     # basic initialization performed for parameters
-    mu <- sigma <- num <- list()
+    mu <- sigma <- num <- obs <- list()
 
     # kmeans initialization
     zValue <- matrix(0, ncol = G, nrow = nObservations)
@@ -339,9 +339,15 @@ mixGaussianClass <- function(dataset,
 
 
     for (g in 1:G) {
-        obs <- which(zValue[, g] == 1)
-        mu[[g]] <- colMeans(dataset[obs, ]) # starting value for mu
-        sigma[[g]] <- var(dataset[obs, ]) # starting value for sample covariance matrix
+        obs[[g]] <- which(zValue[, g] == 1)
+        mu[[g]] <- colMeans(dataset[obs[[g]], ]) # starting value for mu
+        sigma[[g]] <- var(dataset[obs[[g]], ]) # starting value for sample covariance matrix
+        if (g == G) {
+          obs[[g]] <- setdiff(c(1:nObservations), unlist(obs))
+          mu[[g]] <- colMeans(dataset[obs[[g]], ]) # starting value for mu
+          sigma[[g]] <- var(dataset[obs[[g]], ]) # starting value for sample covariance matrix
+
+        }
     }
 
 
