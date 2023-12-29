@@ -37,18 +37,13 @@ install_github("anjalisilva/mixGaussian", build_vignettes = TRUE)
 library("mixGaussian")
 ```
 
+To run the Shiny app:
+
+``` r
+mixGaussian::runMixGaussian()
+```
+
 ## Overview
-
-`mixGaussian` contains 6 functions.
-
-For carrying out clustering of data using mixtures of multivariate
-Gaussian distributions via expectation-maximization (EM):
-***mixGaussianEM***.
-
-Information criteria are offered for model selection: ***AICFunction***,
-***BICFunction***, ***AIC3Function***, ***ICLFunction***.
-
-The shiny implementation of *mixGaussian*: ***runMixGaussian***.
 
 To list all functions available in the package:
 
@@ -56,25 +51,31 @@ To list all functions available in the package:
 ls("package:mixGaussian")
 ```
 
-To run the Shiny app:
+`mixGaussian` contains 6 functions.
 
-``` r
-mixGaussian::runMixGaussian()
-```
+1.  ***mixGaussianEM*** for carrying out clustering of data using
+    mixtures of multivariate Gaussian distributions via
+    expectation-maximization (EM).
+
+2.  ***AICFunction*** for model selection.
+
+3.  ***BICFunction*** for model selection.
+
+4.  ***AIC3Function*** for model selection.
+
+5.  ***ICLFunction*** for model selection.
+
+6.  ***runMixGaussian*** for the shiny implementation of *mixGaussian*.
 
 <div style="text-align:center">
 
 <img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="750" height="550"/>
 
-<div style="text-align:center">
-
-<img src="inst/extdata/ShinyBarPlotsShiny.png" alt="ShinyBarPlotsShiny" width="750" height="550"/>
-
 Figure: Shiny app for mixGaussian package showing cluster results.
 
 <div style="text-align:left">
 <div style="text-align:left">
-
+&#10;
 
 ## Details
 
@@ -112,27 +113,27 @@ citation("mixGaussian")
 
 ## References for Package
 
--   [Aitken, A. C. (1926). A series formula for the roots of algebraic
-    and transcendental equations. *Proceedings of the Royal Society of
-    Edinburgh*](https://www.cambridge.org/core/journals/proceedings-of-the-royal-society-of-edinburgh/article/iiia-series-formula-for-the-roots-of-algebraic-and-transcendental-equations/0CC96A97C8B634E2730F5208E506E6A9)
+- [Aitken, A. C. (1926). A series formula for the roots of algebraic and
+  transcendental equations. *Proceedings of the Royal Society of
+  Edinburgh*](https://www.cambridge.org/core/journals/proceedings-of-the-royal-society-of-edinburgh/article/iiia-series-formula-for-the-roots-of-algebraic-and-transcendental-equations/0CC96A97C8B634E2730F5208E506E6A9)
 
--   [B¨ohning, D., E. Dietz, R. Schaub, P. Schlattmann, and B. Lindsay
-    (1994). The distribution of the likelihood ratio for mixtures of
-    densities from the one-parameter exponential family. *Annals of the
-    Institute of Statistical
-    Mathematics*](https://link.springer.com/article/10.1007/BF01720593)
+- [B¨ohning, D., E. Dietz, R. Schaub, P. Schlattmann, and B. Lindsay
+  (1994). The distribution of the likelihood ratio for mixtures of
+  densities from the one-parameter exponential family. *Annals of the
+  Institute of Statistical
+  Mathematics*](https://link.springer.com/article/10.1007/BF01720593)
 
--   [Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum
-    likelihood from incomplete data via the EM algorithm. *Journal of
-    the Royal Statistical Society: Series
-    B*](https://www.ece.iastate.edu/~namrata/EE527_Spring08/Dempster77.pdf)
+- [Dempster, A. P., N. M. Laird, and D. B. Rubin (1977). Maximum
+  likelihood from incomplete data via the EM algorithm. *Journal of the
+  Royal Statistical Society: Series
+  B*](https://www.ece.iastate.edu/~namrata/EE527_Spring08/Dempster77.pdf)
 
--   For others, refer to help page of inidividual functions via
-    `?function` or `help(function)`.
+- For others, refer to help page of inidividual functions via
+  `?function` or `help(function)`.
 
 ## Maintainer
 
--   Anjali Silva (<anjali@alumni.uoguelph.ca>).
+- Anjali Silva (<anjali@alumni.uoguelph.ca>).
 
 ## Contributions
 

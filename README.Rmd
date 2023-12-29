@@ -36,16 +36,13 @@ install_github("anjalisilva/mixGaussian", build_vignettes = TRUE)
 library("mixGaussian")
 ```
 
+To run the Shiny app:
+
+``` r
+mixGaussian::runMixGaussian()
+```
 
 ## Overview
-
-`mixGaussian` contains 6 functions. 
-
-For carrying out clustering of data using mixtures of multivariate Gaussian distributions via expectation-maximization (EM): __*mixGaussianEM*__. 
-
-Information criteria are offered for model selection: __*AICFunction*__, __*BICFunction*__, __*AIC3Function*__, __*ICLFunction*__. 
-
-The shiny implementation of *mixGaussian*: __*runMixGaussian*__. 
 
 To list all functions available in the package: 
 
@@ -53,19 +50,29 @@ To list all functions available in the package:
 ls("package:mixGaussian")
 ```
 
-To run the Shiny app:
-``` r
-mixGaussian::runMixGaussian()
-```
+`mixGaussian` contains 6 functions. 
+
+1. __*mixGaussianEM*__ for carrying out clustering of data using mixtures of multivariate Gaussian distributions via expectation-maximization (EM).
+
+2. __*AICFunction*__ for model selection. 
+
+3. __*BICFunction*__ for model selection. 
+
+4. __*AIC3Function*__ for model selection. 
+
+5. __*ICLFunction*__ for model selection.  
+
+6. __*runMixGaussian*__ for the shiny implementation of *mixGaussian*. 
+
 
 <div style="text-align:center"><img src="inst/extdata/ShinyLinePlot.png" alt="ShinyLinePlot" width="750" height="550"/>
 
-<div style="text-align:center"><img src="inst/extdata/ShinyBarPlotsShiny.png" alt="ShinyBarPlotsShiny" width="750" height="550"/>
   
- Figure: Shiny app for mixGaussian package showing cluster results.
+Figure: Shiny app for mixGaussian package showing cluster results.
 
 <div style="text-align:left">
 <div style="text-align:left">
+ 
 
 
 ## Details
